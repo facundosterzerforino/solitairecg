@@ -112,6 +112,39 @@ class RulesFreecell extends Rules {
       mDeck = new Deck(1);
     }
 
+ /* Special behavior for double freecell to deal one ace of each suit directly into sinks.
+    In addition to being more consistent with other double freecell implementations,
+    it also prevents starting multiple sinks in the same suit which is also against the rules. */
+    if (mDoubleFreecell){
+      Card[] tempDeck = new Card[100];
+      for (int i = 0; i < 100;) {
+        Card card = mDeck.PopCard();
+        if (card.GetValue() == Card.ACE){
+          if (mCardAnchor[mHoldingCells].GetCount() == 0 && card.GetSuit() == Card.CLUBS){
+            mCardAnchor[mHoldingCells].AddCard(card);
+            continue;
+          } else if (mCardAnchor[mHoldingCells+1].GetCount() == 0 && card.GetSuit() == Card.SPADES){
+            mCardAnchor[mHoldingCells + 1].AddCard(card);
+            continue;
+          } else if (mCardAnchor[mHoldingCells+2].GetCount() == 0 && card.GetSuit() == Card.HEARTS){
+            mCardAnchor[mHoldingCells + 2].AddCard(card);
+            continue;
+          } else if (mCardAnchor[mHoldingCells+3].GetCount() == 0 && card.GetSuit() == Card.DIAMONDS){
+            mCardAnchor[mHoldingCells + 3].AddCard(card);
+            continue;
+          }
+        }
+        tempDeck[i] = card;
+        i++;
+      }
+      for (int i = 0; i < 100;i++) {
+        mDeck.PushCard(tempDeck[i]);
+      }
+      //reshuffle after removing aces, otherwise the remaining ones wouldn't be evenly distributed
+      mDeck.Shuffle();
+      mDeck.Shuffle();
+    }
+
     while (!mDeck.Empty()) {
       for (int i = 0; i < mTableaus && !mDeck.Empty(); i++) {
         mCardAnchor[i + offset].AddCard(mDeck.PopCard());
