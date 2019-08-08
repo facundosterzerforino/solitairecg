@@ -910,7 +910,7 @@ public class SolitaireView extends View {
     } else if (type == "Spider4Suit") {
       cardCount = 52;
       matchCount = 2;
-    } else if (type == "Forty Thieves") {
+    } else if (type == "Forty Thieves" || type == "DoubleFreecellBuildByAlternateColor") {
       cardCount = 52;
       matchCount = 2;
     } else {

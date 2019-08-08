@@ -59,6 +59,7 @@ public class SolitaireCG extends Activity {
   private static final int MENU_VEGAS_DEALTHREE    = 19;
   private static final int MENU_GOLF_WRAPCARDS     = 20;
   private static final int MENU_TRIPEAKS_WRAPCARDS = 21;
+  private static final int MENU_FREECELLX2         = 22;
   // Workaround for inaccessible menu items on some devices
   // and Android versions - add extra blank menu items
   private static final int MENU_BLANK = 999;
@@ -144,6 +145,7 @@ public class SolitaireCG extends Activity {
     SubMenu subMenu = menu.addSubMenu(0, MENU_SELECT_GAME, 0, R.string.menu_selectgame);
     subMenu.add(0, MENU_FORTYTHIEVES, 0, R.string.menu_fortythieves);
     subMenu.add(0, MENU_FREECELL, 0, R.string.menu_freecell);
+    subMenu.add(0, MENU_FREECELLX2, 0, R.string.menu_doublefreecell);
     subMenu.add(0, MENU_BAKERSGAME, 0, R.string.menu_bakersgame);
     subMenu.add(0, MENU_GOLF, 0, R.string.menu_golf);
     subMenu.add(0, MENU_GOLF_WRAPCARDS, 0, R.string.menu_golf_wrapcards);
@@ -173,6 +175,7 @@ public class SolitaireCG extends Activity {
     switch (item.getItemId()) {
       case MENU_BAKERSGAME:
         editor.putBoolean("FreecellBuildBySuit", true);
+        editor.putBoolean("DoubleFreecell", false);
         editor.commit();
         mSolitaireView.InitGame(Rules.FREECELL);
         break;
@@ -181,11 +184,18 @@ public class SolitaireCG extends Activity {
         editor.commit();
         mSolitaireView.InitGame(Rules.SPIDER);
         break;
+      case MENU_FREECELLX2:
+        editor.putBoolean("FreecellBuildBySuit", false);
+        editor.putBoolean("DoubleFreecell", true); //Double Freecell
+        editor.commit();
+        mSolitaireView.InitGame(Rules.FREECELLX2);
+        break;
       case MENU_FORTYTHIEVES:
         mSolitaireView.InitGame(Rules.FORTYTHIEVES);
         break;
       case MENU_FREECELL:
         editor.putBoolean("FreecellBuildBySuit", false); //BuildByAlternateColor
+        editor.putBoolean("DoubleFreecell", false);
         editor.commit();
         mSolitaireView.InitGame(Rules.FREECELL);
         break;

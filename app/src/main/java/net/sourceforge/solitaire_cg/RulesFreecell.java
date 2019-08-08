@@ -23,57 +23,76 @@ import android.os.Bundle;
 class RulesFreecell extends Rules {
 
   private boolean mBySuit;
+  private boolean mDoubleFreecell;
   private static int powerMoveMin = 0;
+  private int mHoldingCells;
+  private static final int mSinks = 4;
+  private int mTableaus;
 
   public void Init(Bundle map) {
     mIgnoreEvents = true;
     mBySuit = mView.GetSettings().getBoolean("FreecellBuildBySuit", false);
+    mDoubleFreecell = mView.GetSettings().getBoolean("DoubleFreecell", false);
 
-    // Thirteen total anchors for regular solitaire
-    mCardCount = 52;
-    mCardAnchorCount = 16;
+    if (mDoubleFreecell){
+      mCardCount = 104;
+      mCardAnchorCount = 20;
+      mHoldingCells = 6;
+      mTableaus = 10;
+    } else {
+      mCardCount = 52;
+      mCardAnchorCount = 16;
+      mHoldingCells = 4;
+      mTableaus = 8;
+    }
     mCardAnchor = new CardAnchor[mCardAnchorCount];
 
     // Top anchors for holding cards
-    for (int i = 0; i < 4; i++) {
+
+    for (int i = 0; i < mHoldingCells; i++) {
       mCardAnchor[i] = CardAnchor.CreateAnchor(CardAnchor.FREECELL_HOLD, i, this);
     }
 
+    int offset = mHoldingCells;
+    
     // Top anchors for sinking cards
-    for (int i = 0; i < 4; i++) {
-      mCardAnchor[i+4] = CardAnchor.CreateAnchor(CardAnchor.SEQ_SINK, i+4, this);
+    final int sinktype = mDoubleFreecell ? CardAnchor.WRAP_SINK : CardAnchor.SEQ_SINK;
+    for (int i = 0; i < mSinks; i++) {
+      mCardAnchor[i + mHoldingCells] = CardAnchor.CreateAnchor(sinktype, i + offset, this);
     }
 
+    offset += mSinks;
+
     // Middle anchor stacks
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < mTableaus; i++) {
       if ( ! mBySuit ) {
         // Normal Freecell - build by alternate color
-        mCardAnchor[i+8] = CardAnchor.CreateAnchor(CardAnchor.FREECELL_STACK, i+8,
+        mCardAnchor[i + offset] = CardAnchor.CreateAnchor(CardAnchor.FREECELL_STACK, i + offset,
                                                    this);
       } else {
         // Baker's Game - build by suit
-        mCardAnchor[i+8] = CardAnchor.CreateAnchor(CardAnchor.GENERIC_ANCHOR, i+8, this);
-        mCardAnchor[i+8].SetBuildSeq(GenericAnchor.SEQ_DSC);
-        mCardAnchor[i+8].SetMoveSeq(GenericAnchor.SEQ_ASC);
-        mCardAnchor[i+8].SetSuit(GenericAnchor.SUIT_SAME);
-        mCardAnchor[i+8].SetWrap(false);
-        mCardAnchor[i+8].SetPickup(GenericAnchor.PACK_LIMIT_BY_FREE);
-        mCardAnchor[i+8].SetDropoff(GenericAnchor.PACK_LIMIT_BY_FREE);
-        mCardAnchor[i+8].SetDisplay(GenericAnchor.DISPLAY_ALL);
+        mCardAnchor[i + offset] = CardAnchor.CreateAnchor(CardAnchor.GENERIC_ANCHOR, i + offset, this);
+        mCardAnchor[i + offset].SetBuildSeq(GenericAnchor.SEQ_DSC);
+        mCardAnchor[i + offset].SetMoveSeq(GenericAnchor.SEQ_ASC);
+        mCardAnchor[i + offset].SetSuit(GenericAnchor.SUIT_SAME);
+        mCardAnchor[i + offset].SetWrap(false);
+        mCardAnchor[i + offset].SetPickup(GenericAnchor.PACK_LIMIT_BY_FREE);
+        mCardAnchor[i + offset].SetDropoff(GenericAnchor.PACK_LIMIT_BY_FREE);
+        mCardAnchor[i + offset].SetDisplay(GenericAnchor.DISPLAY_ALL);
       }
     }
-
+    
     if (map != null) {
       // Do some assertions, default to a new game if we find an invalid state
-      if (map.getInt("cardAnchorCount") == 16 &&
-          map.getInt("cardCount") == 52) {
+      if ( (map.getInt("cardAnchorCount") == 16) || (map.getInt("cardAnchorCount") == 20) &&
+          (map.getInt("cardCount") == 52) || (map.getInt("cardCount") == 104) ) {
         int[] cardCount = map.getIntArray("anchorCardCount");
         int[] hiddenCount = map.getIntArray("anchorHiddenCount");
         int[] value = map.getIntArray("value");
         int[] suit = map.getIntArray("suit");
         int cardIdx = 0;
 
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < mCardAnchorCount; i++) {
           for (int j = 0; j < cardCount[i]; j++, cardIdx++) {
             Card card = new Card(value[cardIdx], suit[cardIdx]);
             mCardAnchor[i].AddCard(card);
@@ -87,30 +106,35 @@ class RulesFreecell extends Rules {
       }
     }
 
-    mDeck = new Deck(1);
+    if (mDoubleFreecell) {
+      mDeck = new Deck(2);
+    } else {
+      mDeck = new Deck(1);
+    }
+
     while (!mDeck.Empty()) {
-      for (int i = 0; i < 8 && !mDeck.Empty(); i++) {
-        mCardAnchor[i+8].AddCard(mDeck.PopCard());
+      for (int i = 0; i < mTableaus && !mDeck.Empty(); i++) {
+        mCardAnchor[i + offset].AddCard(mDeck.PopCard());
       }
     }
     mIgnoreEvents = false;
   }
 
   public void Resize(int width, int height) {
-    int rem = (width - (Card.WIDTH * 8)) / 8;
-    for (int i = 0; i < 8; i++) {
+    int rem = (width - (Card.WIDTH * mTableaus)) / mTableaus;
+    for (int i = 0; i < mTableaus; i++) {
       mCardAnchor[i].SetPosition(rem/2 + i * (rem + Card.WIDTH), 10);
-      mCardAnchor[i+8].SetPosition(rem/2 + i * (rem + Card.WIDTH), 30 + Card.HEIGHT);
-      mCardAnchor[i+8].SetMaxHeight(height - 30 - Card.HEIGHT);
+      mCardAnchor[i+mTableaus].SetPosition(rem/2 + i * (rem + Card.WIDTH), 30 + Card.HEIGHT);
+      mCardAnchor[i+mTableaus].SetMaxHeight(height - 30 - Card.HEIGHT);
     }
 
     // Setup edge cards (Touch sensor loses sensitivity towards the edge).
     mCardAnchor[0].SetLeftEdge(0);
-    mCardAnchor[7].SetRightEdge(width);
-    mCardAnchor[8].SetLeftEdge(0);
-    mCardAnchor[15].SetRightEdge(width);
-    for (int i = 0; i < 8; i++) {
-      mCardAnchor[i+8].SetBottom(height);
+    mCardAnchor[mHoldingCells + mSinks - 1].SetRightEdge(width);
+    mCardAnchor[mHoldingCells + mSinks].SetLeftEdge(0);
+    mCardAnchor[mCardAnchorCount - 1].SetRightEdge(width);
+    for (int i = 0; i < mTableaus; i++) {
+      mCardAnchor[i + mTableaus].SetBottom(height);
     }
   }
 
@@ -118,10 +142,18 @@ class RulesFreecell extends Rules {
     if (mIgnoreEvents) {
       return;
     }
+
+    final int winNumber;
+    if (mDoubleFreecell){
+      winNumber = 26;
+    } else {
+      winNumber = 13;
+    }
+
     if (event == EVENT_STACK_ADD) {
-      if (anchor.GetNumber() >= 4 && anchor.GetNumber() < 8) {
-        if (mCardAnchor[4].GetCount() == 13 && mCardAnchor[5].GetCount() == 13 &&
-            mCardAnchor[6].GetCount() == 13 && mCardAnchor[7].GetCount() == 13) {
+      if (anchor.GetNumber() >= mHoldingCells && anchor.GetNumber() < mHoldingCells + mSinks) {
+        if (mCardAnchor[mHoldingCells].GetCount() == winNumber && mCardAnchor[mHoldingCells + 1].GetCount() == winNumber &&
+            mCardAnchor[mHoldingCells + 2].GetCount() == winNumber && mCardAnchor[mHoldingCells + 3].GetCount() == winNumber) {
           SignalWin();
         } else {
           if (mAutoMoveLevel == AUTO_MOVE_ALWAYS ||
@@ -141,8 +173,8 @@ class RulesFreecell extends Rules {
     if (moveCard.GetCount() == 1) {
       CardAnchor anchor = moveCard.GetAnchor();
       Card card = moveCard.DumpCards(false)[0];
-      for (int i = 0; i < 4; i++) {
-        if (mCardAnchor[i+4].DropSingleCard(card)) {
+      for (int i = 0; i < mSinks; i++) {
+        if (mCardAnchor[i+mHoldingCells].DropSingleCard(card)) {
           EventAlert(EVENT_FLING, anchor, card);
           return true;
         }
@@ -182,10 +214,10 @@ class RulesFreecell extends Rules {
   }
 
   private boolean TryToSinkCard(CardAnchor anchor, Card card) {
-    for (int i = 0; i < 4; i++) {
-      if (mCardAnchor[i+4].DropSingleCard(card)) {
-        mAnimateCard.MoveCard(card, mCardAnchor[i+4]);
-        mMoveHistory.push(new Move(anchor.GetNumber(), i+4, 1, false, false));
+    for (int i = 0; i < mSinks; i++) {
+      if (mCardAnchor[i+mHoldingCells].DropSingleCard(card)) {
+        mAnimateCard.MoveCard(card, mCardAnchor[i + mHoldingCells]);
+        mMoveHistory.push(new Move(anchor.GetNumber(), i + mHoldingCells, 1, false, false));
         return true;
       }
     }
@@ -199,15 +231,16 @@ class RulesFreecell extends Rules {
       return;
     }
     if (event == EVENT_SMART_MOVE) {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < mHoldingCells; i++) {
         if (mCardAnchor[i].GetCount() > 0 &&
             TryToSink(mCardAnchor[i])) {
           return;
         }
       }
-      for (int i = 0; i < 8; i++) {
-        if (mCardAnchor[i+8].GetCount() > 0 &&
-            TryToSink(mCardAnchor[i+8])) {
+      final int offset = mHoldingCells + mSinks;
+      for (int i = 0; i < mTableaus; i++) {
+        if (mCardAnchor[i + offset].GetCount() > 0 &&
+            TryToSink(mCardAnchor[i + offset])) {
           return;
         }
       }
@@ -218,7 +251,7 @@ class RulesFreecell extends Rules {
 
   private int CountFreeCells() {
     int freeCells = 0;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < mHoldingCells; i++) {
       if (mCardAnchor[i].GetCount() == 0) {
         freeCells++;
       }
@@ -228,8 +261,9 @@ class RulesFreecell extends Rules {
 
   private int CountFreeTableaus() {
     int freeTableaus = 0;
-    for (int i = 0; i < 8; i++) {
-      if (mCardAnchor[i+8].GetCount() == 0) {
+    final int offset = mHoldingCells + mSinks;
+    for (int i = 0; i < mTableaus; i++) {
+      if (mCardAnchor[i+offset].GetCount() == 0) {
         freeTableaus++;
       }
     }
@@ -292,7 +326,11 @@ class RulesFreecell extends Rules {
   @Override
   public String GetGameTypeString() {
     if ( ! mBySuit ) {
-      return "FreecellBuildByAlternateColor";
+      if ( mDoubleFreecell ) {
+        return "DoubleFreecellBuildByAlternateColor";
+      } else {
+        return "FreecellBuildByAlternateColor";
+      }
     } else {
       return "FreecellBuildBySuit";
     }
@@ -301,7 +339,11 @@ class RulesFreecell extends Rules {
   @Override
   public String GetPrettyGameTypeString() {
     if ( ! mBySuit ) {
-      return mView.GetContext().getResources().getString(R.string.menu_freecell);
+      if ( mDoubleFreecell ) {
+        return mView.GetContext().getResources().getString(R.string.menu_doublefreecell);
+      } else {
+        return mView.GetContext().getResources().getString(R.string.menu_freecell);
+      }
     } else {
       return mView.GetContext().getResources().getString(R.string.menu_bakersgame);
     }

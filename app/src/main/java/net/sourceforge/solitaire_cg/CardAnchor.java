@@ -23,15 +23,16 @@ import android.graphics.Canvas;
 class CardAnchor {
 
   public static final int MAX_CARDS = 104;
-  public static final int SEQ_SINK = 1;
-  public static final int DEAL_FROM = 2;
-  public static final int DEAL_TO = 3;
-  public static final int FREECELL_STACK = 4;
-  public static final int FREECELL_HOLD = 5;
-  public static final int GOLF_WASTE = 6;
-  public static final int GOLF_WRAPCARDS_WASTE = 7;
-  public static final int GOLF_STACK = 8;
-  public static final int GENERIC_ANCHOR = 9;
+  public static final int SEQ_SINK             = 1;
+  public static final int WRAP_SINK            = 2;
+  public static final int DEAL_FROM            = 3;
+  public static final int DEAL_TO              = 4;
+  public static final int FREECELL_STACK       = 5;
+  public static final int FREECELL_HOLD        = 6;
+  public static final int GOLF_WASTE           = 7;
+  public static final int GOLF_WRAPCARDS_WASTE = 8;
+  public static final int GOLF_STACK           = 9;
+  public static final int GENERIC_ANCHOR       = 10;
 
   private int mNumber;
   protected Rules mRules;
@@ -66,6 +67,9 @@ class CardAnchor {
     switch (type) {
       case SEQ_SINK:
         ret = new SeqSink();
+        break;
+      case WRAP_SINK:
+        ret = new WrappingSeqSink();
         break;
       case DEAL_FROM:
         ret = new DealFrom();
@@ -536,6 +540,41 @@ class SeqSink extends CardAnchor {
     }
   }
 
+}
+
+class WrappingSeqSink extends SeqSink {
+  @Override
+  public boolean CanDropCard(MoveCard moveCard, int close) {
+    if (super.CanDropCard(moveCard,close)){
+      return true;
+    } else if (mCardCount == 0){
+      return false;
+    } else {
+      Card card = moveCard.GetTopCard();
+      Card topCard = mCard[mCardCount - 1];
+      if (topCard != null && topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE &&
+      card.GetSuit() == topCard.GetSuit()){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean DropSingleCard(Card card) {
+    if (super.DropSingleCard(card)){
+      return true;
+    } else if (mCardCount == 0){
+      return false;
+    } else {
+      Card topCard = mCard[mCardCount - 1];
+      if (topCard != null && topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE &&
+      card.GetSuit() == topCard.GetSuit()){
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 // Freecell stack

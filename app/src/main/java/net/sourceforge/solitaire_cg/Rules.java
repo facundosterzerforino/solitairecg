@@ -25,10 +25,11 @@ public abstract class Rules {
 
   public static final int FORTYTHIEVES = 1;
   public static final int FREECELL     = 2;
-  public static final int GOLF         = 3;
-  public static final int KLONDIKE     = 4;
-  public static final int SPIDER       = 5;
-  public static final int TRIPEAKS     = 6;
+  public static final int FREECELLX2   = 3; //needs its own constant so Card.SetSize() doesn't think it's 8 width
+  public static final int GOLF         = 4;
+  public static final int KLONDIKE     = 5;
+  public static final int SPIDER       = 6;
+  public static final int TRIPEAKS     = 7;
 
   public static final int EVENT_INVALID = -1;
   public static final int EVENT_DEAL = 1;
@@ -118,7 +119,7 @@ public abstract class Rules {
       case FORTYTHIEVES:
         ret = new RulesFortyThieves();
         break;
-      case FREECELL:
+      case FREECELL: case FREECELLX2:
         ret = new RulesFreecell();
         break;
       case GOLF:
