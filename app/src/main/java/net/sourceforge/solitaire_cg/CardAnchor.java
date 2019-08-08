@@ -547,12 +547,10 @@ class WrappingSeqSink extends SeqSink {
   public boolean CanDropCard(MoveCard moveCard, int close) {
     if (super.CanDropCard(moveCard,close)){
       return true;
-    } else if (mCardCount == 0){
-      return false;
-    } else {
+    } else if (mCardCount > 0) {
       Card card = moveCard.GetTopCard();
       Card topCard = mCard[mCardCount - 1];
-      if (topCard != null && topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE &&
+      if (topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE &&
       card.GetSuit() == topCard.GetSuit()){
         return true;
       }
@@ -564,11 +562,9 @@ class WrappingSeqSink extends SeqSink {
   public boolean DropSingleCard(Card card) {
     if (super.DropSingleCard(card)){
       return true;
-    } else if (mCardCount == 0){
-      return false;
-    } else {
+    } else if (mCardCount > 0) {
       Card topCard = mCard[mCardCount - 1];
-      if (topCard != null && topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE &&
+      if (topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE &&
       card.GetSuit() == topCard.GetSuit()){
         return true;
       }

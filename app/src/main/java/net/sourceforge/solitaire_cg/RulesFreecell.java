@@ -106,11 +106,7 @@ class RulesFreecell extends Rules {
       }
     }
 
-    if (mDoubleFreecell) {
-      mDeck = new Deck(2);
-    } else {
-      mDeck = new Deck(1);
-    }
+    mDeck = mDoubleFreecell ? new Deck(2) : new Deck(1);
 
  /* Special behavior for double freecell to deal one ace of each suit directly into sinks.
     In addition to being more consistent with other double freecell implementations,
