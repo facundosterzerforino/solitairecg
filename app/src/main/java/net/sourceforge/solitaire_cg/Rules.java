@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Modified by Curtis Gedak 2015, 2016
+  Modified by Curtis Gedak 2015, 2016, 2024
 */
 package net.sourceforge.solitaire_cg;
 
@@ -107,7 +107,7 @@ public abstract class Rules {
   }
 
   public void RefreshOptions() {
-    mAutoMoveLevel = Integer.parseInt(mView.GetSettings().getString("AutoMoveLevel", "1" /* default - fling only */));
+    mAutoMoveLevel = mView.GetSettings().getInt("AutoMoveLevel", Rules.AUTO_MOVE_FLING_ONLY);
     mWasFling = false;
   }
 

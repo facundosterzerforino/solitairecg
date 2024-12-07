@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Modified by Curtis Gedak 2015, 2016, 2017
+  Modified by Curtis Gedak 2015, 2016, 2017, 2024
 */
 package net.sourceforge.solitaire_cg;
 
@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -91,7 +90,7 @@ public class SolitaireCG extends Activity {
     }
 
     // Get shared preferences
-    mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+    mSettings = getSharedPreferences("SolitairePreferences", 0);
 
     // Force landscape for Android API < 14 (Ice Cream Sandwich)
     //   Earlier versions do not change screen size on orientation change
@@ -450,7 +449,7 @@ public class SolitaireCG extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
-    mSettings = PreferenceManager.getDefaultSharedPreferences(this);
+    mSettings = getSharedPreferences("SolitairePreferences", 0);
 
     // Force landscape for Android API < 14 (Ice Cream Sandwich)
     //   Earlier versions do not change screen size on orientation change
@@ -468,6 +467,8 @@ public class SolitaireCG extends Activity {
     // Restore previous state after configuration/orientation change
     if (GetRestoreState() == "STATS") {
       DisplayStats();
+    } else if (GetRestoreState() == "OPTIONS") {
+      DisplayOptions();
     }
   }
 
@@ -477,9 +478,9 @@ public class SolitaireCG extends Activity {
   }
 
   public void DisplayOptions() {
+    SetRestoreState("OPTIONS");
     mSolitaireView.SetTimePassing(false);
-    Intent settingsActivity = new Intent(this, Preferences.class);
-    startActivity(settingsActivity);
+    new Options(this, mSolitaireView.GetDrawMaster());
   }
 
   public void DisplayHelp() {
@@ -496,6 +497,16 @@ public class SolitaireCG extends Activity {
 
   public void CancelOptions() {
     ClearRestoreState();
+    // Force landscape for Android API < 14 (Ice Cream Sandwich)
+    //   Earlier versions do not change screen size on orientation change
+    if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
+        || mSettings.getBoolean("LockLandscape", false)
+       ) {
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    } else {
+      // Needed to clear orientation when lock landscape option not set
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    }
     setContentView(mMainView);
     mSolitaireView.requestFocus();
     mSolitaireView.SetTimePassing(true);

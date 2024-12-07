@@ -1,5 +1,5 @@
 /*
-  Copyright 2015, 2016, 2017 Curtis Gedak
+  Copyright 2015, 2016, 2017, 2024 Curtis Gedak
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.webkit.WebView;
@@ -29,15 +28,22 @@ public class Help extends Activity {
 
   // View extracted from help.xml
   private WebView mWebView;
+  private SharedPreferences mSettings;
+
+  // Shared preferences are where the various user settings are stored.
+  public SharedPreferences GetSettings() { return mSettings; }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    // Get shared preferences
+    mSettings = getSharedPreferences("SolitairePreferences", 0);
+
     // Force landscape for Android API < 14 (Ice Cream Sandwich)
     //   Earlier versions do not change screen size on orientation change
     if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
-        || PreferenceManager.getDefaultSharedPreferences(this).getBoolean("LockLandscape", false)
+        || mSettings.getBoolean("LockLandscape", false)
        ) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
