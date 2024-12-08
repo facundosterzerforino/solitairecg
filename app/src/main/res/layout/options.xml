@@ -104,16 +104,5 @@
 
     </RadioGroup>
 
-    <LinearLayout
-      android:orientation="horizontal"
-      android:layout_width="fill_parent"
-      android:gravity="center"
-      android:layout_height="wrap_content">
-      <Button android:id="@+id/button_accept"
-        android:text="@string/accept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    </LinearLayout>
   </LinearLayout>
 </ScrollView>

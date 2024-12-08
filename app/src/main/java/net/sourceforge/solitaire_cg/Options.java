@@ -50,55 +50,49 @@ public class Options {
     ((RadioButton)solitaire.findViewById(R.id.auto_move_fling_only)).setChecked(autoMove == Rules.AUTO_MOVE_FLING_ONLY);
     ((RadioButton)solitaire.findViewById(R.id.auto_move_never)).setChecked(autoMove == Rules.AUTO_MOVE_NEVER);
 
-    final Button accept = (Button) solitaire.findViewById(R.id.button_accept);
-    accept.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        boolean commit = false;
-        SharedPreferences.Editor editor = solitaire.GetSettings().edit();
-
-        if (displayTime != ((CheckBox)solitaire.findViewById(R.id.display_time)).isChecked()) {
-          editor.putBoolean("DisplayTime", !displayTime);
-          commit = true;
-        }
-
-        if (bigCards != ((CheckBox)solitaire.findViewById(R.id.big_cards)).isChecked()) {
-          editor.putBoolean("DisplayBigCards", !bigCards);
-          commit = true;
-          drawMaster.DrawCards(!bigCards);
-        }
-
-        if (lockLandscape != ((CheckBox)solitaire.findViewById(R.id.lock_landscape)).isChecked()) {
-          editor.putBoolean("LockLandscape", !lockLandscape);
-          commit = true;
-        }
-
-        int newAutoMove = Rules.AUTO_MOVE_NEVER;
-        if (((RadioButton)solitaire.findViewById(R.id.auto_move_always)).isChecked()) {
-          newAutoMove = Rules.AUTO_MOVE_ALWAYS;
-        } else if (((RadioButton)solitaire.findViewById(R.id.auto_move_fling_only)).isChecked()) {
-          newAutoMove = Rules.AUTO_MOVE_FLING_ONLY;
-        }
-
-        if (newAutoMove != autoMove) {
-          editor.putInt("AutoMoveLevel", newAutoMove);
-          commit = true;
-        }
-
-        if (commit) {
-          // Save option changes
-          editor.commit();
-          solitaire.RefreshOptions();
-        }
-        // Close options
-        solitaire.CancelOptions();
-      }
-    });
-
     view.setOnKeyListener(new View.OnKeyListener() {
       @Override
       public boolean onKey(View v, int keyCode, KeyEvent event) {
         switch (keyCode) {
           case KeyEvent.KEYCODE_BACK:
+            // If options are changed then save when back key pressed
+            boolean commit = false;
+            SharedPreferences.Editor editor = solitaire.GetSettings().edit();
+
+            if (displayTime != ((CheckBox)solitaire.findViewById(R.id.display_time)).isChecked()) {
+              editor.putBoolean("DisplayTime", !displayTime);
+              commit = true;
+            }
+
+            if (bigCards != ((CheckBox)solitaire.findViewById(R.id.big_cards)).isChecked()) {
+              editor.putBoolean("DisplayBigCards", !bigCards);
+              commit = true;
+              drawMaster.DrawCards(!bigCards);
+            }
+
+            if (lockLandscape != ((CheckBox)solitaire.findViewById(R.id.lock_landscape)).isChecked()) {
+              editor.putBoolean("LockLandscape", !lockLandscape);
+              commit = true;
+            }
+
+            int newAutoMove = Rules.AUTO_MOVE_NEVER;
+            if (((RadioButton)solitaire.findViewById(R.id.auto_move_always)).isChecked()) {
+              newAutoMove = Rules.AUTO_MOVE_ALWAYS;
+            } else if (((RadioButton)solitaire.findViewById(R.id.auto_move_fling_only)).isChecked()) {
+              newAutoMove = Rules.AUTO_MOVE_FLING_ONLY;
+            }
+
+            if (newAutoMove != autoMove) {
+              editor.putInt("AutoMoveLevel", newAutoMove);
+              commit = true;
+            }
+
+            if (commit) {
+              // Save option changes
+              editor.commit();
+              solitaire.RefreshOptions();
+            }
+
             solitaire.CancelOptions();
             return true;
           case KeyEvent.KEYCODE_MENU:
