@@ -114,7 +114,7 @@ public class SolitaireView extends View {
       mDpi = 160;
 
     // Get screen orientation
-    int screenOrientation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+    int screenOrientation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
     mIsLandscape = true;
     if (   screenOrientation == Surface.ROTATION_0
         || screenOrientation == Surface.ROTATION_180

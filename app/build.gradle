@@ -24,12 +24,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion 4
+    compileSdkVersion 8
 
     defaultConfig {
         applicationId "net.sourceforge.solitaire_cg"
-        minSdkVersion 4
-        targetSdkVersion 4
+        minSdkVersion 8
+        targetSdkVersion 8
         versionCode 3041
         versionName "3.4.1"
     }
