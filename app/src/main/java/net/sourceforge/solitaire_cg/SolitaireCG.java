@@ -92,11 +92,8 @@ public class SolitaireCG extends Activity {
     // Get shared preferences
     mSettings = getSharedPreferences("SolitairePreferences", 0);
 
-    // Force landscape for Android API < 14 (Ice Cream Sandwich)
-    //   Earlier versions do not change screen size on orientation change
-    if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
-        || mSettings.getBoolean("LockLandscape", false)
-       ) {
+    // Force landscape if specified
+    if (mSettings.getBoolean("LockLandscape", false)) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
@@ -451,11 +448,8 @@ public class SolitaireCG extends Activity {
     super.onResume();
     mSettings = getSharedPreferences("SolitairePreferences", 0);
 
-    // Force landscape for Android API < 14 (Ice Cream Sandwich)
-    //   Earlier versions do not change screen size on orientation change
-    if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
-        || mSettings.getBoolean("LockLandscape", false)
-       ) {
+    // Force landscape if specified
+    if (mSettings.getBoolean("LockLandscape", false)) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     } else {
       // Needed to clear orientation when lock landscape option not set
@@ -497,11 +491,8 @@ public class SolitaireCG extends Activity {
 
   public void CancelOptions() {
     ClearRestoreState();
-    // Force landscape for Android API < 14 (Ice Cream Sandwich)
-    //   Earlier versions do not change screen size on orientation change
-    if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
-        || mSettings.getBoolean("LockLandscape", false)
-       ) {
+    // Force landscape if specified
+    if (mSettings.getBoolean("LockLandscape", false)) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     } else {
       // Needed to clear orientation when lock landscape option not set

@@ -40,11 +40,8 @@ public class Help extends Activity {
     // Get shared preferences
     mSettings = getSharedPreferences("SolitairePreferences", 0);
 
-    // Force landscape for Android API < 14 (Ice Cream Sandwich)
-    //   Earlier versions do not change screen size on orientation change
-    if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
-        || mSettings.getBoolean("LockLandscape", false)
-       ) {
+    // Force landscape if specified
+    if (mSettings.getBoolean("LockLandscape", false)) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
@@ -100,14 +97,8 @@ public class Help extends Activity {
       + "<a href=\"#top\">Back to top</a>"
       + "</body></html>";
 
-    // Check for Android API <= 18 (Android 4.3 Jelly Bean) and load the
-    // help text using loadData instead.  The reason is because
-    // loadDataWithBaseURL() displays html as plain text on lower APIs.
-    if ( Integer.valueOf(android.os.Build.VERSION.SDK) <= 18 ) {
-      mWebView.loadData( helpText, "text/html; charset=utf-8", "utf-8");
-    } else {
-      mWebView.loadDataWithBaseURL("app:helpText", helpText, "text/html; charset=utf-8", "utf-8", "");
-    }
+    //Load web view
+    mWebView.loadDataWithBaseURL("app:helpText", helpText, "text/html; charset=utf-8", "utf-8", "");
   }
 
   // The following three methods attempt to maintain the user's
