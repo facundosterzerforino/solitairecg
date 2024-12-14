@@ -22,6 +22,7 @@ SolitaireCG see the project web site:
 Change Log (in reverse chronological order)
 -------------------------------------------
 
+  * Set compile/target to Android 13, fix deprecation warnings
   * Set compile/target to Android 12, fix deprecation warnings
   * Upgrade to gradle 8.7.3 build process
   * Set compile/target to Android 11, fix deprecation warnings

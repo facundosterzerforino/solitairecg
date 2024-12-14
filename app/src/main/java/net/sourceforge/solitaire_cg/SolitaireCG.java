@@ -38,8 +38,6 @@ import android.widget.Toast;
 // Base activity class.
 public class SolitaireCG extends Activity {
 
-  public static String VERSION_NAME = "";
-
   private static final int MENU_SELECT_GAME  = 1;
   private static final int MENU_NEW          = 2;
   private static final int MENU_RESTART      = 3;
@@ -108,13 +106,6 @@ public class SolitaireCG extends Activity {
 
     //StartSolitaire(savedInstanceState);
     registerForContextMenu(mSolitaireView);
-
-    // Set global variable for versionName
-    try {
-      VERSION_NAME = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-    } catch (NameNotFoundException e) {
-      Log.e("SolitaireCG.java", e.getMessage());
-    }
   }
 
   // Entry point for starting the game.

@@ -24,6 +24,9 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.webkit.WebView;
 
+// Used to get versionName from app/build.gradle
+import net.sourceforge.solitaire_cg.BuildConfig;
+
 public class Help extends Activity {
 
   // View extracted from help.xml
@@ -74,7 +77,7 @@ public class Help extends Activity {
     //   mWebView.loadUrl("file:///android_res/raw/help_contents.txt");
     String helpText = "<html><body>"
       + "<a name=\"top\"></a>"
-      + "<h1>" + String.format(this.getString(R.string.help_window_title), SolitaireCG.VERSION_NAME) + "</h1>"
+      + "<h1>" + String.format(this.getString(R.string.help_window_title), BuildConfig.VERSION_NAME) + "</h1>"
       + Utils.readRawTextFile(this, R.raw.help_contents).replace("\n"," ")
         // Append README file
       + "<hr>"
