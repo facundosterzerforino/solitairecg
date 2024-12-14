@@ -26,12 +26,12 @@ repositories {
 android {
     namespace "net.sourceforge.solitaire_cg"
 
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "net.sourceforge.solitaire_cg"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 3041
         versionName "3.4.1"
     }
