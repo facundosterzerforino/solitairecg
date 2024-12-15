@@ -22,6 +22,7 @@ SolitaireCG see the project web site:
 Change Log (in reverse chronological order)
 -------------------------------------------
 
+  * Restore white text on dark background with android:Theme.Material
   * Set compile/target to Android 10, fix deprecation warnings
   * Set minimum to Android 5.0, fix deprecation warnings
   * Set minimum to Android 2.2 as getOrientation() gets deprecated
