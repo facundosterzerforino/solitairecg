@@ -424,8 +424,14 @@ public class SolitaireView extends View {
         Refresh();
       }
       mTimePaused = false;
+
+      // We really really really want focus :)
+      setFocusable(true);
+      setFocusableInTouchMode(true);
+      requestFocus();
+
       return true;
-      
+
     } catch (FileNotFoundException e) {
       Log.e("SolitaireView.java", "LoadSave(): File not found");
     } catch (StreamCorruptedException e) {
