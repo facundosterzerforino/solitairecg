@@ -1,0 +1,6 @@
+Changes with Release v4.0 on Dec 23, 2024
+
+* Add support for Android 14
+* Consequence 1: Lost three dot "..." options menu on Android < 10
+* Consequence 2: Revert to Options screen as preference handling deprecated
+* Consequence 3: Bump minimum SDK to API 21 (Android 5.0)
