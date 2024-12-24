@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Modified by Curtis Gedak 2015, 2016, 2017, 2024
+  Modified by Curtis Gedak 2015, 2016, 2017, 2024, 2025
 */
 package net.sourceforge.solitaire_cg;
 
@@ -910,7 +910,8 @@ public class SolitaireView extends View {
     } else if (type == "Spider4Suit") {
       cardCount = 52;
       matchCount = 2;
-    } else if (type == "Forty Thieves" || type == "DoubleFreecellBuildByAlternateColor") {
+    } else if ( (type == "Forty Thieves") ||
+                (type == "DoubleFreecellBuildByAlternateColor") ) {
       cardCount = 52;
       matchCount = 2;
     } else {

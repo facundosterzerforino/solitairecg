@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Modified by Curtis Gedak 2015, 2016, 2024
+  Modified by Curtis Gedak 2015, 2016, 2024, 2025
 */
 package net.sourceforge.solitaire_cg;
 
@@ -119,7 +119,8 @@ public abstract class Rules {
       case FORTYTHIEVES:
         ret = new RulesFortyThieves();
         break;
-      case FREECELL: case FREECELLX2:
+      case FREECELL:
+      case FREECELLX2:
         ret = new RulesFreecell();
         break;
       case GOLF:

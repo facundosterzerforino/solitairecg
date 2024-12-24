@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Modified by Curtis Gedak 2015, 2016, 2017
+  Modified by Curtis Gedak 2015, 2016, 2017, 2025
 */
 package net.sourceforge.solitaire_cg;
 
@@ -56,7 +56,7 @@ class RulesFreecell extends Rules {
     int offset = mHoldingCells;
     
     // Top anchors for sinking cards
-    final int sinktype = mDoubleFreecell ? CardAnchor.WRAP_SINK : CardAnchor.SEQ_SINK;
+    final int sinktype = mDoubleFreecell ? CardAnchor.WRAP_SEQ_SINK : CardAnchor.SEQ_SINK;
     for (int i = 0; i < mSinks; i++) {
       mCardAnchor[i + mHoldingCells] = CardAnchor.CreateAnchor(sinktype, i + offset, this);
     }
@@ -84,8 +84,12 @@ class RulesFreecell extends Rules {
     
     if (map != null) {
       // Do some assertions, default to a new game if we find an invalid state
-      if ( (map.getInt("cardAnchorCount") == 16) || (map.getInt("cardAnchorCount") == 20) &&
-          (map.getInt("cardCount") == 52) || (map.getInt("cardCount") == 104) ) {
+      if ( ( /* Freecell */
+             (map.getInt("cardAnchorCount") == 16) &&
+             (map.getInt("cardCount") == 52) ) ||
+           ( /* Double Freecell */
+             (map.getInt("cardAnchorCount") == 20) &&
+             (map.getInt("cardCount") == 104) ) ) {
         int[] cardCount = map.getIntArray("anchorCardCount");
         int[] hiddenCount = map.getIntArray("anchorHiddenCount");
         int[] value = map.getIntArray("value");
@@ -136,9 +140,6 @@ class RulesFreecell extends Rules {
       for (int i = 0; i < 100;i++) {
         mDeck.PushCard(tempDeck[i]);
       }
-      //reshuffle after removing aces, otherwise the remaining ones wouldn't be evenly distributed
-      mDeck.Shuffle();
-      mDeck.Shuffle();
     }
 
     while (!mDeck.Empty()) {

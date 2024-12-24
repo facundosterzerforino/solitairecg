@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Modified by Curtis Gedak 2015, 2016, 2017
+  Modified by Curtis Gedak 2015, 2016, 2017, 2025
 */
 package net.sourceforge.solitaire_cg;
 
@@ -24,7 +24,7 @@ class CardAnchor {
 
   public static final int MAX_CARDS = 104;
   public static final int SEQ_SINK             = 1;
-  public static final int WRAP_SINK            = 2;
+  public static final int WRAP_SEQ_SINK        = 2;
   public static final int DEAL_FROM            = 3;
   public static final int DEAL_TO              = 4;
   public static final int FREECELL_STACK       = 5;
@@ -68,8 +68,8 @@ class CardAnchor {
       case SEQ_SINK:
         ret = new SeqSink();
         break;
-      case WRAP_SINK:
-        ret = new WrappingSeqSink();
+      case WRAP_SEQ_SINK:
+        ret = new WrapSeqSink();
         break;
       case DEAL_FROM:
         ret = new DealFrom();
@@ -542,7 +542,7 @@ class SeqSink extends CardAnchor {
 
 }
 
-class WrappingSeqSink extends SeqSink {
+class WrapSeqSink extends SeqSink {
   @Override
   public boolean CanDropCard(MoveCard moveCard, int close) {
     if (super.CanDropCard(moveCard,close)){

@@ -7,6 +7,7 @@ several single player card games for your enjoyment.
 <a href="#terms">Terminology</a><br>
  &nbsp; <a href="#bakersgame">Baker's Game</a><br>
  &nbsp; <a href="#blackwidow">Black Widow</a><br>
+ &nbsp; <a href="#doublefreecell">Double Freecell</a><br>
  &nbsp; <a href="#fortythieves">Forty Thieves</a><br>
  &nbsp; <a href="#freecell">Freecell</a><br>
  &nbsp; <a href="#golf">Golf</a><br>
@@ -139,6 +140,17 @@ href="#tarantula">Tarantula</a>.
 </p>
 <a href="#top">Back to top</a>
 
+<h2 id="doublefreecell">Double Freecell</h2>
+<p>
+A challenging two deck variation of Freecell.  Play is the similar to
+<a href="#freecell">Freecell</a> except for following changes: There
+are two card decks, six stocks (two more holding cells), and ten
+tableaus (two more working piles).  Foundations build in ascending
+same suit sequence but wrap from King to Ace to accomodate the extra
+card deck.  The game starts with an ace of each suit in a foundation.
+</p>
+<a href="#top">Back to top</a>
+
 <h2 id="fortythieves">Forty Thieves</h2>
 <p>
 A widely known two deck solitaire game.
@@ -194,7 +206,8 @@ Move all cards to the foundations.
 </p>
 <p>
 <b>Variations</b><br>
-<i>Build Order</i> - Tableaus build down either: <i>(Freecell)</i> by
+<i>Build Order</i> - Tableaus build down either: <i>(Freecell)</i> and
+two card deck <i><a href="#doublefreecell">Double Freecell</a></i> by
 alternating color, or <i><a href="#bakersgame">Baker's Game</a></i> by
 suit.
 </p>

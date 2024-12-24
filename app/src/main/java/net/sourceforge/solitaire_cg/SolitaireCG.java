@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Modified by Curtis Gedak 2015, 2016, 2017, 2024
+  Modified by Curtis Gedak 2015, 2016, 2017, 2024, 2025
 */
 package net.sourceforge.solitaire_cg;
 
@@ -184,12 +184,6 @@ public class SolitaireCG extends Activity {
         editor.commit();
         mSolitaireView.InitGame(Rules.SPIDER);
         break;
-      case MENU_FREECELLX2:
-        editor.putBoolean("FreecellBuildBySuit", false);
-        editor.putBoolean("DoubleFreecell", true); //Double Freecell
-        editor.commit();
-        mSolitaireView.InitGame(Rules.FREECELLX2);
-        break;
       case MENU_FORTYTHIEVES:
         mSolitaireView.InitGame(Rules.FORTYTHIEVES);
         break;
@@ -198,6 +192,12 @@ public class SolitaireCG extends Activity {
         editor.putBoolean("DoubleFreecell", false);
         editor.commit();
         mSolitaireView.InitGame(Rules.FREECELL);
+        break;
+      case MENU_FREECELLX2:
+        editor.putBoolean("FreecellBuildBySuit", false);
+        editor.putBoolean("DoubleFreecell", true); //Double Freecell
+        editor.commit();
+        mSolitaireView.InitGame(Rules.FREECELLX2);
         break;
       case MENU_GOLF:
         editor.putBoolean("GolfWrapCards", false); //No build on King
@@ -287,6 +287,7 @@ public class SolitaireCG extends Activity {
     SubMenu subMenu = menu.addSubMenu(0, MENU_SELECT_GAME, 0, R.string.menu_selectgame);
     subMenu.add(0, MENU_FORTYTHIEVES, 0, R.string.menu_fortythieves);
     subMenu.add(0, MENU_FREECELL, 0, R.string.menu_freecell);
+    subMenu.add(0, MENU_FREECELLX2, 0, R.string.menu_doublefreecell);
     subMenu.add(0, MENU_BAKERSGAME, 0, R.string.menu_bakersgame);
     subMenu.add(0, MENU_GOLF, 0, R.string.menu_golf);
     subMenu.add(0, MENU_GOLF_WRAPCARDS, 0, R.string.menu_golf_wrapcards);
@@ -326,6 +327,7 @@ public class SolitaireCG extends Activity {
     switch (item.getItemId()) {
       case MENU_BAKERSGAME:
         editor.putBoolean("FreecellBuildBySuit", true);
+        editor.putBoolean("DoubleFreecell", false);
         editor.commit();
         mSolitaireView.InitGame(Rules.FREECELL);
         break;
@@ -339,8 +341,15 @@ public class SolitaireCG extends Activity {
         break;
       case MENU_FREECELL:
         editor.putBoolean("FreecellBuildBySuit", false); //BuildByAlternateColor
+        editor.putBoolean("DoubleFreecell", false);
         editor.commit();
         mSolitaireView.InitGame(Rules.FREECELL);
+        break;
+      case MENU_FREECELLX2:
+        editor.putBoolean("FreecellBuildBySuit", false);
+        editor.putBoolean("DoubleFreecell", true); //Double Freecell
+        editor.commit();
+        mSolitaireView.InitGame(Rules.FREECELLX2);
         break;
       case MENU_GOLF:
         editor.putBoolean("GolfWrapCards", false); //No build on King
