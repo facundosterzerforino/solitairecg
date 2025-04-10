@@ -545,16 +545,27 @@ class SeqSink extends CardAnchor {
 class WrapSeqSink extends SeqSink {
   @Override
   public boolean CanDropCard(MoveCard moveCard, int close) {
-    if (super.CanDropCard(moveCard,close)){
-      return true;
-    } else if (mCardCount > 0) {
-      Card card = moveCard.GetTopCard();
-      Card topCard = mCard[mCardCount - 1];
-      if (topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE &&
-      card.GetSuit() == topCard.GetSuit()){
-        return true;
+    /* Called for every stack on drop of MoveCard
+     * Finds the stack that matches the coordinates,
+     * but passes logic over to CanBuildCard()
+     */
+    Card card = moveCard.GetTopCard();
+    float x = card.GetX() + Card.WIDTH/2;
+    float y = card.GetY() + Card.HEIGHT/2;
+    Card topCard = mCardCount > 0 ? mCard[mCardCount - 1] : null;
+
+    if (IsOverCard(x, y, close)) {
+      if (moveCard.GetCount() == 1) {
+        if ( (topCard == null && card.GetValue() == 1) ||
+             (topCard != null && card.GetSuit() == topCard.GetSuit() &&
+              card.GetValue() == topCard.GetValue() + 1) ||
+             (topCard != null && card.GetSuit() == topCard.GetSuit() &&
+              topCard.GetValue() == Card.KING && card.GetValue() == Card.ACE) ) {
+          return true;
+        }
       }
     }
+
     return false;
   }
 
