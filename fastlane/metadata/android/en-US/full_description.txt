@@ -6,6 +6,7 @@ Card Games include:
 
 * <b>Forty Thieves</b>
 * <b>Freecell</b> - build by alternate color
+* <b>Double Freecell</b> - 2 decks
 * <b>Baker's Game</b> - build by suit
 * <b>Golf</b> - no build on king, wrap cards
 * <b>Klondike (regular solitaire)</b> - unlimited passes through deck, deal 3 or 1 card
