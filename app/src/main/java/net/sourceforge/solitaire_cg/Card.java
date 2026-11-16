@@ -75,6 +75,23 @@ class Card {
               ) / 2;
     }
 
+    // xt550-libre: in portrait, grow the cards to fill the screen width
+    //   (on a 320 px wide phone the formula above gives 30 px wide cards
+    //   for Klondike, leaving a third of the width as empty table).
+    if (isLandscape == false) {
+      int columns = 10;
+      if (type == Rules.GOLF || type == Rules.KLONDIKE) {
+        columns = 7;
+      } else if (type == Rules.FREECELL) {
+        columns = 8;
+      }
+      int gap = Math.max(2, screenWidth/160);
+      int fill = (screenWidth - (columns+1)*gap) / columns;
+      if (fill > WIDTH) {
+        WIDTH = fill;
+      }
+    }
+
     // Calculate card HEIGHT
     //   Use integer math:  1.425 = 57/40, even number = /2*2
     //                      1.425 card height/width ratio -> even #

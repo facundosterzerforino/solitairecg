@@ -14,6 +14,16 @@ versions once did not resize the view on rotation. On a Motorola XT550
   Android 4.0 and later. That option now shows on 2.3 too.
 - No other code changes.
 
+## Change: bigger cards in portrait
+
+In portrait the upstream formula gives 30 px wide cards for Klondike on a
+320 px wide screen, so a third of the table is empty. `Card.SetSize` now
+grows the cards to fill the width: 7, 8 or 10 columns, with a gap of
+`max(2, width/160)` px. Klondike cards go from 30 to 43 px wide. Landscape
+is unchanged, and so is any layout where the old formula already gives
+bigger cards. Tested on the XT550: dealing from the deck and dragging a
+king to an empty column work.
+
 ## Build
 
 `build.py` builds offline (aapt, javac, d8, apksigner) against the Android
