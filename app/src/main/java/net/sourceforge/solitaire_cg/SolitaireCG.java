@@ -93,10 +93,9 @@ public class SolitaireCG extends Activity {
     // Get shared preferences
     mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
-    // Force landscape for Android API < 14 (Ice Cream Sandwich)
-    //   Earlier versions do not change screen size on orientation change
-    if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
-        || mSettings.getBoolean("LockLandscape", false)
+    // xt550-libre: portrait also allowed on Android < 4.0 (tested on 2.3.6);
+    //   landscape is forced only by the "Lock Landscape" option
+    if (   mSettings.getBoolean("LockLandscape", false)
        ) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
@@ -452,10 +451,9 @@ public class SolitaireCG extends Activity {
     super.onResume();
     mSettings = PreferenceManager.getDefaultSharedPreferences(this);
 
-    // Force landscape for Android API < 14 (Ice Cream Sandwich)
-    //   Earlier versions do not change screen size on orientation change
-    if (   Integer.valueOf(android.os.Build.VERSION.SDK) < 14
-        || mSettings.getBoolean("LockLandscape", false)
+    // xt550-libre: portrait also allowed on Android < 4.0 (tested on 2.3.6);
+    //   landscape is forced only by the "Lock Landscape" option
+    if (   mSettings.getBoolean("LockLandscape", false)
        ) {
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     } else {

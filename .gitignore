@@ -42,3 +42,5 @@ Thumbs.db
 
 # Mac OSX files
 .DS_Store
+build/
+build.log
